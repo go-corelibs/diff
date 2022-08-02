@@ -1,4 +1,4 @@
-module github.com/go-curses/coreutils/diff
+module github.com/go-curses/corelibs/diff
 
 go 1.17
 
