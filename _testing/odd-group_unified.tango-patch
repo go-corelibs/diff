@@ -1,0 +1,8 @@
+<span foreground="#eeeeee" background="#770000">--- a/odd-group.txt</span>
+<span foreground="#ffffff" background="#007700">+++ b/odd-group.txt</span>
+<span style="italic" weight="dim">@@ -1,4 +1,3 @@</span>
+<span foreground="#eeeeee" background="#770000">-This is the <span background="#440000" weight="dim" strikethrough="true">odd</span> group of changes.</span>
+<span foreground="#ffffff" background="#007700">+This is the <span background="#004400" weight="bold">even</span> group of changes.</span>
+<span foreground="#eeeeee" background="#770000">-Meaning that there needs to be a batch in progress,</span>
+<span weight="dim"> with at least one deletion and one addition,</span>
+<span weight="dim"> with another deletion immediately following.</span>

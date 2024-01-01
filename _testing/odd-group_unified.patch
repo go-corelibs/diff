@@ -1,0 +1,8 @@
+--- a/odd-group.txt
++++ b/odd-group.txt
+@@ -1,4 +1,3 @@
+-This is the odd group of changes.
++This is the even group of changes.
+-Meaning that there needs to be a batch in progress,
+ with at least one deletion and one addition,
+ with another deletion immediately following.
