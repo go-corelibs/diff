@@ -16,8 +16,8 @@ LOCAL_CORELIBS_PATH ?= ..
 
 define __list_corelibs
 $(shell grep -h -v '^module' go.mod \
-		| grep 'go-curses/corelibs/' \
-		| perl -pe 's!^.*(github\.com/go-curses/corelibs/\S+).*$$!$${1}!' \
+		| grep 'go-corelibs/' \
+		| perl -pe 's!^.*(github\.com/go-corelibs/\S+).*$$!$${1}!' \
 		| sort -u -V)
 endef
 
