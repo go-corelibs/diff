@@ -33,6 +33,9 @@ type Diff struct {
 	groups  [][]int
 }
 
+// New constructs a new Diff instance with the given source and changed
+// strings computed into a set of "edits" which can be selectively
+// included in the Diff.UnifiedEdits and Diff.ModifiedEdits outputs
 func New(path, source, changed string) (delta *Diff) {
 	delta = new(Diff)
 	delta.path = path
@@ -89,13 +92,15 @@ func (d *Diff) Len() (length int) {
 	return
 }
 
+// KeepLen returns the total number of edits flagged to be included
+// in the UnifiedEdits and ModifiedEdits output
 func (d *Diff) KeepLen() (count int) {
 	count = len(d.keep)
 	return
 }
 
-// KeepAll flags all edits to be included in the UnifiedEdits() and
-// ModifiedEdits() output
+// KeepAll flags all edits to be included in the UnifiedEdits and
+// ModifiedEdits output
 func (d *Diff) KeepAll() {
 	d.keep = nil
 	for idx, _ := range d.edits {
@@ -182,11 +187,13 @@ func (d *Diff) ModifiedEdits() (modified string, err error) {
 	return
 }
 
+// EditGroupsLen returns the count of edit groups present
 func (d *Diff) EditGroupsLen() (count int) {
 	count = len(d.groups)
 	return
 }
 
+// EditGroup returns the unified diff of the edit group at the given index
 func (d *Diff) EditGroup(index int) (unified string) {
 	ap, bp := d.abPaths()
 	if index >= 0 && index < len(d.groups) {
@@ -199,6 +206,8 @@ func (d *Diff) EditGroup(index int) (unified string) {
 	return
 }
 
+// KeepGroup flags the given group index for including in the UnifiedEdits and
+// ModifiedEdits outputs
 func (d *Diff) KeepGroup(index int) {
 	if index >= 0 && index < len(d.groups) {
 		for _, gid := range d.groups[index] {
@@ -207,6 +216,8 @@ func (d *Diff) KeepGroup(index int) {
 	}
 }
 
+// SkipGroup flags the given group index for exclusion from the UnifiedEdits
+// and ModifiedEdits outputs
 func (d *Diff) SkipGroup(index int) {
 	if index >= 0 && index < len(d.groups) {
 		for _, gid := range d.groups[index] {
