@@ -143,32 +143,28 @@ func (r *CRender) RenderLine(a, b string) (ma, mb string) {
 	return
 }
 
-func (r *CRender) RenderDiff(unified string) (markup string) {
-	var lines []string
-	original := strings.Split(unified, "\n")
+func (r *CRender) processRenderDiffBatch(lastIdx int, lines *[]string, batch **renderBatch) {
+	if batch == nil {
+		return
+	}
 
-	var batch *renderBatch
-
-	processBatch := func(lastIdx int) {
-		if batch == nil {
-			return
-		}
-
-		if numDel := len(batch.d); numDel > 0 {
-			if numAdd := len(batch.a); numAdd > 0 {
-				for idx := range batch.d {
-					if idx < numAdd {
-						a, b := r.RenderLine(batch.d[idx], batch.a[idx])
-						lines[lastIdx-numDel-numAdd+idx] = "-" + a
-						lines[lastIdx-numAdd+idx] = "+" + b
-					}
+	if numDel := len((*batch).d); numDel > 0 {
+		if numAdd := len((*batch).a); numAdd > 0 {
+			for idx := range (*batch).d {
+				if idx < numAdd {
+					a, b := r.RenderLine((*batch).d[idx], (*batch).a[idx])
+					(*lines)[lastIdx-numDel-numAdd+idx] = "-" + a
+					(*lines)[lastIdx-numAdd+idx] = "+" + b
 				}
 			}
 		}
-
-		batch = nil
 	}
 
+	*batch = nil
+}
+
+func (r *CRender) prepareRenderDiff(original []string) (lines []string) {
+	var batch *renderBatch
 	for idx, line := range original {
 		if idx < 2 {
 			// skip the patch header lines
@@ -178,7 +174,7 @@ func (r *CRender) RenderDiff(unified string) (markup string) {
 		size := len(line)
 		if size == 0 {
 			lines = append(lines, "")
-			processBatch(idx)
+			r.processRenderDiffBatch(idx, &lines, &batch)
 			continue
 		}
 		lines = append(lines, string(line[0])+html.EscapeString(line[1:]))
@@ -193,17 +189,23 @@ func (r *CRender) RenderDiff(unified string) (markup string) {
 		// batch in progress
 		if line[0] == '-' {
 			if len(batch.a) > 0 {
-				processBatch(idx)
+				r.processRenderDiffBatch(idx, &lines, &batch)
 				batch = &renderBatch{}
 			}
 			batch.rem(line[1:])
 		} else if line[0] == '+' {
 			batch.add(line[1:])
 		} else {
-			processBatch(idx)
+			r.processRenderDiffBatch(idx, &lines, &batch)
 		}
 	}
-	processBatch(len(original))
+	r.processRenderDiffBatch(len(original), &lines, &batch)
+	return
+}
+
+func (r *CRender) RenderDiff(unified string) (markup string) {
+	original := strings.Split(unified, "\n")
+	lines := r.prepareRenderDiff(original)
 
 	for _, line := range lines {
 		if size := len(line); size > 0 {
