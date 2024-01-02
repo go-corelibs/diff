@@ -1,6 +1,6 @@
 #!/usr/bin/make --no-print-directory --jobs=1 --environment-overrides -f
 
-CORELIBS_MK_VERSION := v0.1.1
+CORELIBS_MK_VERSION := v0.1.2
 
 SHELL = /bin/bash
 LOCAL_CORELIBS_PATH ?= ..
@@ -74,6 +74,9 @@ be-update:
 tidy:
 	@go mod tidy
 
+deps:
+	@go get ./...
+
 build:
 	@go build -v ./...
 
@@ -83,16 +86,9 @@ clean:
 test:
 	@go test -v ./...
 
-coverage: XDG_OPEN_BIN=`which xdg-open`
-coverage: OSX_OPEN_BIN=`which open`
 coverage:
-	@go test -coverpkg=./... -coverprofile=coverage.out
+	@go test -race -coverprofile=coverage.out -covermode=atomic -coverpkg=./... -v ./...
 	@go tool cover -html=coverage.out -o=coverage.html
-	@if [ -n "${XDG_OPEN_BIN}" ]; then \
-		${XDG_OPEN_BIN} ./coverage.html; \
-	elif [ -n "${OSX_OPEN_BIN}" ]; then \
-		${OSX_OPEN_BIN} ./coverage.html; \
-	fi
 
 goconvey:
 	@echo "# running goconvey... (press <CTRL+c> to stop)"
