@@ -103,7 +103,7 @@ func (d *Diff) KeepLen() (count int) {
 // ModifiedEdits output
 func (d *Diff) KeepAll() {
 	d.keep = nil
-	for idx, _ := range d.edits {
+	for idx := range d.edits {
 		d.keep = append(d.keep, idx)
 	}
 }
