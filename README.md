@@ -1,4 +1,7 @@
-# go-corelibs/diff - Unified diff utilities
+[![godoc](https://img.shields.io/badge/godoc-reference-blue.svg)](https://pkg.go.dev/github.com/go-corelibs/diff)
+[![codecov](https://codecov.io/gh/go-corelibs/diff/graph/badge.svg?token=eYOQzElsZQ)](https://codecov.io/gh/go-corelibs/diff/tree/trunk)
+
+# go-corelibs/diff - unified diff utilities
 
 diff is a Go package for computing the differences between two strings, can
 interact with the result to selectively pick groups of changes and generate
