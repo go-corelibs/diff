@@ -12,11 +12,11 @@ jobs:
         with:
           go-version: '1.21.x'
       - name: Install dependencies
-        run: go get .
-      - name: Build
-        run: go build -v ./...
-      - name: Test with the Go CLI
-        run: go test
+        run: make deps
+      - name: Make Build
+        run: make build
+      - name: Make Test Coverage
+        run: make coverage
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
         env:
