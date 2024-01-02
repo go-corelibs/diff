@@ -1,5 +1,6 @@
 [![godoc](https://img.shields.io/badge/godoc-reference-blue.svg)](https://pkg.go.dev/github.com/go-corelibs/diff)
-[![codecov](https://codecov.io/gh/go-corelibs/diff/graph/badge.svg?token=eYOQzElsZQ)](https://codecov.io/gh/go-corelibs/diff/tree/trunk)
+[![codecov](https://codecov.io/gh/go-corelibs/diff/graph/badge.svg?token=eYOQzElsZQ)](https://codecov.io/gh/go-corelibs/diff)
+[![Go Report Card](https://goreportcard.com/badge/github.com/go-corelibs/diff)](https://goreportcard.com/report/github.com/go-corelibs/diff)
 
 # go-corelibs/diff - unified diff utilities
 
