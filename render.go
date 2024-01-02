@@ -21,23 +21,41 @@ import (
 	"github.com/sergi/go-diff/diffmatchpatch"
 )
 
+// RenderBuilder is the buildable interface for constructing new Renderer instances
 type RenderBuilder interface {
+	// SetFile specifies the markup wrapping the entire unified diff
 	SetFile(open, close string) RenderBuilder
+	// SetNormal specifies the markup wrapping each normal line of unified diff
 	SetNormal(open, close string) RenderBuilder
+	// SetComment specifies the markup wrapping comment lines (starting with a backslash `\` or a hash `#`)
 	SetComment(open, close string) RenderBuilder
+	// SetLineAdded specifies the markup wrapping lines that were added
 	SetLineAdded(open, close string) RenderBuilder
+	// SetTextAdded specifies the markup wrapping additions within a line
 	SetTextAdded(open, close string) RenderBuilder
+	// SetLineRemoved specifies the markup wrapping lines that were removed
 	SetLineRemoved(open, close string) RenderBuilder
+	// SetTextRemoved specifies the markup wrapping removals within a line
 	SetTextRemoved(open, close string) RenderBuilder
+	// Make returns the built Renderer instance
 	Make() Renderer
 }
 
+// Renderer is the interface used to actual render unified diff content
 type Renderer interface {
+	// RenderLine compares to single-line strings and highlights the differences
+	// with the CRender.Text markup strings
 	RenderLine(a, b string) (ma, mb string)
+	// RenderDiff parses a unified diff string and highlights the interesting
+	// details using the CRender.Line, CRender.Comment and CRender.Normal
+	// markup strings
 	RenderDiff(unified string) (markup string)
+	// Clone returns a new RenderBuilder instance configured exactly the same
+	// as the one the Clone method is called upon
 	Clone() RenderBuilder
 }
 
+// CRender implements the RenderBuilder and Renderer interfaces
 type CRender struct {
 	File    MarkupTag
 	Normal  MarkupTag
@@ -46,6 +64,7 @@ type CRender struct {
 	Text    AddRemTags
 }
 
+// NewRenderer returns a new RenderBuilder instance
 func NewRenderer() (tb RenderBuilder) {
 	tb = &CRender{}
 	return
