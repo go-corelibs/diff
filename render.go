@@ -144,7 +144,7 @@ func (r *CRender) RenderLine(a, b string) (ma, mb string) {
 }
 
 func (r *CRender) processRenderDiffBatch(lastIdx int, lines *[]string, batch **renderBatch) {
-	if batch == nil {
+	if *batch == nil {
 		return
 	}
 
