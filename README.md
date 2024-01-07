@@ -2,7 +2,7 @@
 [![codecov](https://codecov.io/gh/go-corelibs/diff/graph/badge.svg?token=eYOQzElsZQ)](https://codecov.io/gh/go-corelibs/diff)
 [![Go Report Card](https://goreportcard.com/badge/github.com/go-corelibs/diff)](https://goreportcard.com/report/github.com/go-corelibs/diff)
 
-# go-corelibs/diff - unified diff utilities
+# diff - unified diff utilities
 
 diff is a Go package for computing the differences between two strings, can
 interact with the result to selectively pick groups of changes and generate
@@ -14,7 +14,7 @@ unified diff output.
 > go get github.com/go-corelibs/diff@latest
 ```
 
-# Description
+# Examples
 
 ## Diff
 
