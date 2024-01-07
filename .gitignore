@@ -1,3 +1,16 @@
-/.idea
-/coverage.out
-/coverage.html
+### goland-ide template
+
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
+go_build_*
+go_test_*
+
+### go build files template
+
+# build files
+*.log
+*.pprof
+coverage.*
