@@ -17,11 +17,12 @@ package diff
 import (
 	"fmt"
 	"os"
-	"sort"
 
 	"github.com/hexops/gotextdiff"
 	"github.com/hexops/gotextdiff/myers"
 	"github.com/hexops/gotextdiff/span"
+
+	"github.com/go-corelibs/maps"
 )
 
 type Diff struct {
@@ -29,7 +30,7 @@ type Diff struct {
 	source  string
 	changed string
 	edits   []gotextdiff.TextEdit
-	keep    []int
+	keep    map[int]struct{}
 	groups  [][]int
 }
 
@@ -41,7 +42,7 @@ func New(path, source, changed string) (delta *Diff) {
 	delta.path = path
 	delta.source = source
 	delta.changed = changed
-	delta.keep = nil
+	delta.keep = make(map[int]struct{})
 	delta.init()
 	return
 }
@@ -102,27 +103,18 @@ func (d *Diff) KeepLen() (count int) {
 // KeepAll flags all edits to be included in the UnifiedEdits and
 // ModifiedEdits output
 func (d *Diff) KeepAll() {
-	d.keep = nil
+	d.keep = make(map[int]struct{})
 	for idx := range d.edits {
-		d.keep = append(d.keep, idx)
+		d.keep[idx] = struct{}{}
 	}
 }
 
 // KeepEdit flags a particular edit to be included in the UnifiedEdits() and
 // ModifiedEdits() output
 func (d *Diff) KeepEdit(index int) (ok bool) {
-	numEdits := len(d.edits)
-	if numEdits > 0 && index >= 0 && index < numEdits {
-		var found bool
-		for _, kid := range d.keep {
-			if kid == index {
-				found = true
-				break
-			}
-		}
-		if !found {
-			d.keep = append(d.keep, index)
-			sort.Ints(d.keep)
+	if count := len(d.edits); count > 0 && index >= 0 && index < count {
+		if _, present := d.keep[index]; !present {
+			d.keep[index] = struct{}{}
 		}
 		ok = true
 	}
@@ -137,19 +129,10 @@ func (d *Diff) SkipAll() {
 
 // SkipEdit flags a particular edit to be excluded in the UnifiedEdits() output
 func (d *Diff) SkipEdit(index int) (ok bool) {
-	numEdits := len(d.edits)
-	if numEdits > 0 && index >= 0 && index < numEdits {
-		idx := -1
-		for i, v := range d.keep {
-			if index == v {
-				idx = i
-				break
-			}
+	if count := len(d.edits); count > 0 && index >= 0 && index < count {
+		if _, ok = d.keep[index]; ok {
+			delete(d.keep, index)
 		}
-		if idx > -1 {
-			d.keep = append(d.keep[:idx], d.keep[idx+1:]...)
-		}
-		ok = true
 	}
 	return
 }
@@ -165,7 +148,7 @@ func (d *Diff) UnifiedEdit(index int) (unified string) {
 func (d *Diff) UnifiedEdits() (unified string) {
 	ap, bp := d.abPaths()
 	var edits []gotextdiff.TextEdit
-	for _, index := range d.keep {
+	for _, index := range maps.SortedNumbers(d.keep) {
 		edits = append(edits, d.edits[index])
 	}
 	unified = fmt.Sprint(gotextdiff.ToUnified(ap, bp, d.source, edits))
@@ -180,7 +163,7 @@ func (d *Diff) ModifiedEdits() (modified string, err error) {
 		}
 	}()
 	var edits []gotextdiff.TextEdit
-	for _, index := range d.keep {
+	for _, index := range maps.SortedNumbers(d.keep) {
 		edits = append(edits, d.edits[index])
 	}
 	modified = gotextdiff.ApplyEdits(d.source, edits)
