@@ -2,6 +2,6 @@
 
 VERSION_TAGS += DIFF
 DIFF_MK_SUMMARY := go-corelibs/diff
-DIFF_MK_VERSION := v1.0.2
+DIFF_MK_VERSION := v1.0.3
 
 include CoreLibs.mk
