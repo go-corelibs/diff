@@ -124,7 +124,7 @@ func (d *Diff) KeepEdit(index int) (ok bool) {
 // SkipAll flags all edits to be excluded in the UnifiedEdits() and
 // ModifiedEdits() output
 func (d *Diff) SkipAll() {
-	d.keep = nil
+	d.keep = make(map[int]struct{})
 }
 
 // SkipEdit flags a particular edit to be excluded in the UnifiedEdits() output
