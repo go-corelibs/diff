@@ -208,3 +208,19 @@ func (d *Diff) SkipGroup(index int) {
 		}
 	}
 }
+
+// GetEdit returns the change text for the index given
+func (d *Diff) GetEdit(index int) (text string, ok bool) {
+	if ok = index >= 0 && index < d.Len(); ok {
+		text = d.edits[index].NewText
+	}
+	return
+}
+
+// SetEdit updates the change text for the index given
+func (d *Diff) SetEdit(index int, text string) (ok bool) {
+	if ok = index >= 0 && index < d.Len(); ok {
+		d.edits[index].NewText = text
+	}
+	return
+}
