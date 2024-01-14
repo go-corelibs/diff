@@ -103,4 +103,20 @@ func TestDigitValues(t *testing.T) {
 		})
 	})
 
+	Convey("get/set specific edits", t, func() {
+		delta := New("rpl-group.txt", rplGroupA, rplGroupB)
+		So(delta, ShouldNotEqual, nil)
+
+		Convey("update edit 1", func() {
+			delta.KeepAll()
+			edit, ok := delta.GetEdit(1)
+			So(ok, ShouldEqual, true)
+			So(edit, ShouldEqual, "On THE oTHEr hand, we denounce with righteous indignation and dislike men who\n")
+			So(delta.SetEdit(1, "(edited)\n"), ShouldEqual, true)
+			unified := delta.UnifiedEdits()
+			So(unified, ShouldEqual, rplGroupUnifiedEdited)
+		})
+
+	})
+
 }

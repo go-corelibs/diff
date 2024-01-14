@@ -42,6 +42,15 @@ var oneGroupUnified string
 //go:embed _testing/one-group_unified.tango-patch
 var oneGroupUnifiedTango string
 
+//go:embed _testing/rpl-group_a.txt
+var rplGroupA string
+
+//go:embed _testing/rpl-group_b.txt
+var rplGroupB string
+
+//go:embed _testing/rpl-group_unified_edited.patch
+var rplGroupUnifiedEdited string
+
 //go:embed _testing/two-groups_a.txt
 var twoGroupsA string
 
