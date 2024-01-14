@@ -3,6 +3,6 @@
 CORELIB_PKG := go-corelibs/diff
 VERSION_TAGS += MAIN
 MAIN_MK_SUMMARY := ${CORELIB_PKG}
-MAIN_MK_VERSION := v1.0.3
+MAIN_MK_VERSION := v1.1.0
 
 include CoreLibs.mk
