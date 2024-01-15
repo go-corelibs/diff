@@ -16,7 +16,6 @@ package diff
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/hexops/gotextdiff"
 	"github.com/hexops/gotextdiff/myers"
@@ -75,8 +74,13 @@ func (d *Diff) init() {
 }
 
 func (d *Diff) abPaths() (a, b string) {
-	a = fmt.Sprintf("a%c%v", os.PathSeparator, d.path)
-	b = fmt.Sprintf("b%c%v", os.PathSeparator, d.path)
+	a, b = "a", "b"
+	if d.path != "" && d.path[0] != '/' {
+		a += "/"
+		b += "/"
+	}
+	a += d.path
+	b += d.path
 	return
 }
 
